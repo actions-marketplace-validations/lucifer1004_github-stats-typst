@@ -152,7 +152,6 @@ timezone = "+08:00"  # Timezone for commit time analysis
 
 [repos]
 pinned = ["owner/repo1", "owner/repo2"]  # Repos to highlight
-orgs = ["my-org"]  # Include org repos in stats
 
 [language]
 commits_limit = 1000  # Commits to sample for language stats

@@ -3,7 +3,6 @@ timezone = "+08:00"
 
 [repos]
 pinned = ["govctl-org/govctl", "tile-ai/tilelang"]
-orgs = ["govctl-org"]
 
 [language]
 commits_limit = 100

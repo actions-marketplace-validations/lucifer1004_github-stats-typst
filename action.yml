@@ -30,6 +30,14 @@ inputs:
     description: "Version of github-readme-stats CLI to use (e.g., v0.1.0, latest)"
     required: false
     default: "latest"
+  font:
+    description: "Font family for cards (must be available in CI or provide font-url)"
+    required: false
+    default: "Inter"
+  font-url:
+    description: "URL to download font (.ttf, .otf, or .zip/.tar.gz archive)"
+    required: false
+    default: "https://github.com/rsms/inter/releases/download/v4.1/Inter-4.1.zip"
 
 outputs:
   files:
@@ -42,6 +50,52 @@ runs:
       uses: typst-community/setup-typst@v4
       with:
         typst-version: "latest"
+
+    - name: Download font
+      shell: bash
+      env:
+        FONT_URL: ${{ inputs.font-url }}
+      run: |
+        set -euo pipefail
+
+        if [ -z "$FONT_URL" ]; then
+          echo "No font URL provided, using system fonts"
+          exit 0
+        fi
+
+        FONT_DIR="$HOME/.local/share/fonts"
+        mkdir -p "$FONT_DIR"
+
+        echo "Downloading font from $FONT_URL..."
+        TEMP_FILE=$(mktemp)
+
+        curl -sL "$FONT_URL" -o "$TEMP_FILE"
+
+        # Detect file type and extract
+        case "$FONT_URL" in
+          *.zip)
+            unzip -q -o "$TEMP_FILE" -d "$FONT_DIR"
+            ;;
+          *.tar.gz|*.tgz)
+            tar -xzf "$TEMP_FILE" -C "$FONT_DIR"
+            ;;
+          *.ttf|*.otf)
+            cp "$TEMP_FILE" "$FONT_DIR/"
+            ;;
+          *)
+            # Try to detect by content
+            if file "$TEMP_FILE" | grep -q "Zip archive"; then
+              unzip -q -o "$TEMP_FILE" -d "$FONT_DIR"
+            elif file "$TEMP_FILE" | grep -q "gzip"; then
+              tar -xzf "$TEMP_FILE" -C "$FONT_DIR"
+            else
+              cp "$TEMP_FILE" "$FONT_DIR/font.ttf"
+            fi
+            ;;
+        esac
+
+        rm -f "$TEMP_FILE"
+        echo "Font installed to $FONT_DIR"
 
     - name: Install github-readme-stats CLI
       uses: jaxxstorm/action-install-gh-release@v2.1.0
@@ -117,10 +171,18 @@ runs:
         THEME: ${{ inputs.theme }}
         CARDS: ${{ inputs.cards }}
         OUTPUT_DIR: ${{ inputs.output-dir }}
+        FONT: ${{ inputs.font }}
       run: |
         set -euo pipefail
 
         mkdir -p "$OUTPUT_DIR"
+
+        # Add font directory to Typst font path
+        FONT_DIR="$HOME/.local/share/fonts"
+        FONT_PATH_ARG=""
+        if [ -d "$FONT_DIR" ]; then
+          FONT_PATH_ARG="--font-path $FONT_DIR"
+        fi
 
         GENERATED_FILES=""
 
@@ -140,7 +202,9 @@ runs:
           typst compile "$TEMPLATE" "$OUTPUT_FILE" \
             --root . \
             --input theme="$THEME" \
-            --input stats="/stats.json"
+            --input stats="/stats.json" \
+            --input font="$FONT" \
+            $FONT_PATH_ARG
 
           if [ -n "$GENERATED_FILES" ]; then
             GENERATED_FILES="${GENERATED_FILES},"

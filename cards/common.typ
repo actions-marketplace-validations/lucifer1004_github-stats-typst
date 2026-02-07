@@ -14,6 +14,8 @@
 #let theme-name = sys.inputs.at("theme", default: "github")
 // Path to stats JSON passed via --input stats="/stats.json"
 #let stats-path = sys.inputs.at("stats", default: "/stats.json")
+// Font family passed via --input font="Inter"
+#let font-family = sys.inputs.at("font", default: "Inter")
 
 // --- Exposed values ---
 /// The active theme dictionary (bg, fg, accent, dim, card-bg, bar, border, heatmap)
@@ -33,7 +35,7 @@
     fill: none,
   )
   set text(
-    font: ("Inter", "SF Pro", "Helvetica Neue", "Arial", "sans-serif"),
+    font: font-family,
     size: text-size,
     fill: theme.fg,
   )

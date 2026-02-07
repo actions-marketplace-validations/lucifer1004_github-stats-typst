@@ -90,7 +90,6 @@ timezone = "+08:00"
 
 [repos]
 pinned = ["owner/repo1", "owner/repo2"]
-orgs = ["my-org"]
 
 [language]
 commits_limit = 1000
@@ -173,6 +172,8 @@ exclude = ["HTML", "CSS"]  # Languages to exclude
 | `cards`       | `profile,timedist` | Cards to generate                                                                                                         |
 | `output-dir`  | `.`                | Output directory                                                                                                          |
 | `cli-version` | `latest`           | Version of github-readme-stats CLI                                                                                        |
+| `font`        | `Inter`            | Font family for cards                                                                                                     |
+| `font-url`    | Inter v4.1 release | URL to download font (`.ttf`, `.otf`, `.zip`, or `.tar.gz`)                                                               |
 
 ---
 

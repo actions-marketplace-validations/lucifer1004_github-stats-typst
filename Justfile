@@ -28,6 +28,7 @@ render-profile theme=theme:
     typst compile cards/profile.typ profile-{{theme}}.svg \
         --root . \
         --input theme="{{theme}}" \
+        --input font="JetBrains Mono" \
         --input stats="/stats.json"
 
 # Render heatmap card to SVG
@@ -35,6 +36,7 @@ render-heatmap theme=theme:
     typst compile cards/heatmap.typ heatmap-{{theme}}.svg \
         --root . \
         --input theme="{{theme}}" \
+        --input font="JetBrains Mono" \
         --input stats="/stats.json"
 
 # Render pinned repos card to SVG
@@ -42,6 +44,7 @@ render-pinned theme=theme:
     typst compile cards/pinned.typ pinned-{{theme}}.svg \
         --root . \
         --input theme="{{theme}}" \
+        --input font="JetBrains Mono" \
         --input stats="/stats.json"
 
 # Render time distribution card to SVG
@@ -49,6 +52,7 @@ render-timedist theme=theme:
     typst compile cards/timedist.typ timedist-{{theme}}.svg \
         --root . \
         --input theme="{{theme}}" \
+        --input font="JetBrains Mono" \
         --input stats="/stats.json"
 
 # Render language usage card to SVG
@@ -56,6 +60,7 @@ render-language theme=theme:
     typst compile cards/language.typ language-{{theme}}.svg \
         --root . \
         --input theme="{{theme}}" \
+        --input font="JetBrains Mono" \
         --input stats="/stats.json"
 
 # Render all cards

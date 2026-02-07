@@ -83,19 +83,24 @@
   let bar-width = ratio * bar-max-width
   let color = get-lang-color(name, idx)
 
+  // Truncate long names to fit in label column
+  let display-name = if name.len() > 10 { name.slice(0, 9) + "…" } else { name }
+
   grid(
     columns: (label-width, 1fr, percent-width),
     gutter: 12pt,
     align(left + horizon)[
-      #box(
-        width: 10pt,
-        height: 10pt,
-        radius: 2pt,
-        fill: color,
-        baseline: 2pt,
-      )
-      #h(8pt)
-      #text(size: 10pt, weight: "medium", fill: theme.fg)[#name]
+      #box(height: 14pt)[
+        #box(
+          width: 10pt,
+          height: 10pt,
+          radius: 2pt,
+          fill: color,
+          baseline: 2pt,
+        )
+        #h(6pt)
+        #text(size: 10pt, weight: "medium", fill: theme.fg)[#display-name]
+      ]
     ],
     align(left + horizon)[
       #box(
